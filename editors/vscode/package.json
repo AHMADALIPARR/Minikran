@@ -1,0 +1,15 @@
+{
+  "name": "minikran",
+  "displayName": "Minikran",
+  "description": "Syntax highlighting for Minikran resource spec (.mkr) files",
+  "version": "0.1.0",
+  "publisher": "AHMADALIPARR",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": { "type": "git", "url": "https://github.com/AHMADALIPARR/Minikran" },
+  "engines": { "vscode": "^1.75.0" },
+  "categories": ["Programming Languages"],
+  "contributes": {
+    "languages": [{ "id": "minikran", "aliases": ["Minikran", "minikran"], "extensions": [".mkr"], "configuration": "./language-configuration.json" }],
+    "grammars": [{ "language": "minikran", "scopeName": "source.minikran", "path": "./syntaxes/minikran.tmLanguage.json" }]
+  }
+}

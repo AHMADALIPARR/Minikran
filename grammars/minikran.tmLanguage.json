@@ -1,0 +1,40 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Minikran",
+  "scopeName": "source.minikran",
+  "fileTypes": ["mkr"],
+  "patterns": [
+    { "include": "#comment" },
+    { "include": "#lease" },
+    { "include": "#assert" },
+    { "include": "#field" },
+    { "include": "#constant" },
+    { "include": "#number" },
+    { "include": "#string" },
+    { "include": "#member" },
+    { "include": "#punctuation" }
+  ],
+  "repository": {
+    "comment": { "name": "comment.line.number-sign.minikran", "match": "#.*$" },
+    "lease": {
+      "match": "\\b(lease)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+      "captures": { "1": { "name": "keyword.declaration.lease.minikran" }, "2": { "name": "entity.name.type.lease.minikran" } }
+    },
+    "assert": { "name": "keyword.control.assert.minikran", "match": "\\bassert\\b" },
+    "field": {
+      "match": "\\b(cpu|mem|store|power|verified|[A-Za-z_][A-Za-z0-9_]*)\\s*(:)",
+      "captures": { "1": { "name": "variable.other.property.minikran" }, "2": { "name": "punctuation.separator.key-value.minikran" } }
+    },
+    "constant": { "name": "constant.language.boolean.minikran", "match": "\\b(true|false)\\b" },
+    "number": { "name": "constant.numeric.minikran", "match": "\\b[0-9]+(\\.[0-9]+)?\\b" },
+    "string": {
+      "name": "string.quoted.double.minikran", "begin": "\"", "end": "\"",
+      "patterns": [ { "name": "constant.character.escape.minikran", "match": "\\\\." } ]
+    },
+    "member": {
+      "match": "\\b([A-Za-z_][A-Za-z0-9_]*)(\\.)([A-Za-z_][A-Za-z0-9_]*)",
+      "captures": { "1": { "name": "variable.other.object.minikran" }, "2": { "name": "punctuation.accessor.minikran" }, "3": { "name": "variable.other.property.minikran" } }
+    },
+    "punctuation": { "name": "punctuation.section.block.minikran", "match": "[{}]" }
+  }
+}
