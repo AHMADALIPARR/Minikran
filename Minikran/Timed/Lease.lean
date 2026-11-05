@@ -50,23 +50,21 @@ theorem seq_strictly_increases (t : TimedLease) (now lastSeq : Nat)
     (h : gate t now lastSeq = .COMMIT) :
     lastSeq < t.seq := by
   simp [gate] at h
-  cases h with
-  | inl h1 => contradiction
-  | inr h2 =>
-    cases h2 with
-    | inl h3 => contradiction
-    | inr h4 => exact h4
+  by_cases hv : isValid t now
+  · by_cases hs : t.seq ≤ lastSeq
+    · simp [hv, hs] at h
+    · exact Nat.lt_of_not_le hs
+  · simp [hv] at h
 
 /-- COMMIT means every check passed. -/
 theorem commit_implies_all_checks (t : TimedLease) (now lastSeq : Nat)
     (h : gate t now lastSeq = .COMMIT) :
     isValid t now ∧ lastSeq < t.seq := by
   simp [gate] at h
-  cases h with
-  | inl h1 => contradiction
-  | inr h2 =>
-    cases h2 with
-    | inl h3 => contradiction
-    | inr h4 => exact ⟨h2.1, h4⟩
+  by_cases hv : isValid t now
+  · by_cases hs : t.seq ≤ lastSeq
+    · simp [hv, hs] at h
+    · exact ⟨hv, Nat.lt_of_not_le hs⟩
+  · simp [hv] at h
 
 end Minikran
