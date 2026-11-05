@@ -5,3 +5,4 @@ See LICENSE file for full terms. After 2 years from release, converts to Apache-
 -/
 
 import Minikran.Lease
+import Minikran.Timed.Lease

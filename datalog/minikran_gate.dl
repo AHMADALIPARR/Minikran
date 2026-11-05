@@ -1,0 +1,21 @@
+// Minikran admission gate (Soufflé)
+// Matches the Lean TimedLease rules.
+
+.decl Lease(cpu: number, mem: number, store: number, power: number, verified: symbol, issued: number, expires: number, seq: number, sigOk: symbol)
+.input Lease
+
+.decl Now(now: number)
+.input Now
+
+.decl LastSeq(last: number)
+.input LastSeq
+
+.decl Valid(seq: number)
+Valid(seq) :- Lease(_,_,_,_, "true", _, expires, seq, "true"), Now(now), now < expires.
+
+.decl Gate(result: symbol)
+Gate("SILENCE") :- Lease(_,_,_,_,_,_,_,seq,_), !Valid(seq).
+Gate("SILENCE") :- Valid(seq), LastSeq(last), seq <= last.
+Gate("COMMIT") :- Valid(seq), LastSeq(last), seq > last.
+
+.output Gate
