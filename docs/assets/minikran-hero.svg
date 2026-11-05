@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="480" viewBox="0 0 1200 480">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0c0d0f"/>
+      <stop offset="100%" style="stop-color:#141618"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#9aabba"/>
+      <stop offset="100%" style="stop-color:#c5d0d8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="480" fill="url(#bg)"/>
+  <rect x="24" y="24" width="1152" height="432" fill="none" stroke="#9aabba" stroke-width="1" opacity="0.35"/>
+  <rect x="36" y="36" width="1128" height="408" fill="none" stroke="#9aabba" stroke-width="0.5" opacity="0.2"/>
+  <g stroke="#9aabba" stroke-width="1.2" fill="none" opacity="0.55">
+    <path d="M120 280 H280"/>
+    <path d="M280 280 L320 240 H400 L440 280 H560"/>
+    <path d="M560 280 L600 320 H720 L760 280 H900"/>
+    <circle cx="280" cy="280" r="6"/>
+    <circle cx="440" cy="280" r="6"/>
+    <circle cx="560" cy="280" r="6"/>
+    <circle cx="760" cy="280" r="6"/>
+    <circle cx="900" cy="280" r="6"/>
+  </g>
+  <g fill="none" stroke="#eceae4" stroke-width="1" opacity="0.4">
+    <rect x="180" y="140" width="72" height="36" rx="2"/>
+    <rect x="320" y="140" width="72" height="36" rx="2"/>
+    <rect x="460" y="140" width="72" height="36" rx="2"/>
+    <path d="M252 158 H320"/>
+    <path d="M392 158 H460"/>
+  </g>
+  <text x="80" y="120" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="56" font-weight="600" fill="#eceae4" letter-spacing="4">MINIKRAN</text>
+  <text x="80" y="168" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" fill="#9aabba" letter-spacing="2">VERIFIED EXECUTION LEASES · ADMISSION GATE · WORM RECEIPTS</text>
+  <text x="80" y="380" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#9aabba" opacity="0.8">SnapKitty Research Lab</text>
+  <text x="80" y="402" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="12" fill="#6a7a88">Ahmad Ali Parr · Team</text>
+  <rect x="80" y="320" width="180" height="2" fill="url(#steel)" opacity="0.7"/>
+</svg>
