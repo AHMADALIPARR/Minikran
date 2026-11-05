@@ -31,13 +31,7 @@ theorem production_lease_within_ceiling :
     productionLease.mem ≤ 32 ∧
     productionLease.store ≤ 100 ∧
     productionLease.power ≤ 50 := by
-  constructor
-  · rfl
-  · constructor
-    · rfl
-    · constructor
-      · rfl
-      · rfl
+  decide
 
 /-- Theorem verifying that the execution lease is cryptographically and logically verified. -/
 theorem lease_is_verified : productionLease.verified = true := by
