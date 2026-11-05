@@ -1,0 +1,27 @@
+// Minikran admission policy (as originally specified)
+// WARNING: This version can overcommit in three ways:
+// 1. Bids checked one-at-a-time (two bids that each fit can both be admitted)
+// 2. One task can land on several nodes
+// 3. 32-bit overflow on Req + Load
+
+.decl Node(id: symbol, cpuCap: number, memCap: number, storeCap: number, powerCap: number)
+.input Node
+
+.decl Bid(taskId: symbol, nodeId: symbol, cpu: number, mem: number, store: number, power: number, priority: number)
+.input Bid
+
+.decl Load(nodeId: symbol, cpuLoad: number, memLoad: number, storeLoad: number, powerLoad: number)
+.input Load
+
+// Naive one-at-a-time check (vulnerable)
+.decl Admit(taskId: symbol, nodeId: symbol)
+Admit(taskId, nodeId) :-
+    Bid(taskId, nodeId, cpu, mem, store, power, _),
+    Node(nodeId, cpuCap, memCap, storeCap, powerCap),
+    Load(nodeId, cpuLoad, memLoad, storeLoad, powerLoad),
+    cpu + cpuLoad <= cpuCap,
+    mem + memLoad <= memCap,
+    store + storeLoad <= storeCap,
+    power + powerLoad <= powerCap.
+
+.output Admit

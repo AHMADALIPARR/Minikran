@@ -1,0 +1,24 @@
+// Test fixtures for admission overcommit cases
+// Case 1: Two bids that each fit but together exceed
+// Case 2: Same task bidding on two nodes
+// Case 3: Overflow-sized request
+
+Node
+n1	16	32	100	50
+
+Load
+n1	0	0	0	0
+
+// Two bids that each fit (cpu 10) but together exceed 16
+Bid
+t1	n1	10	8	20	10	1
+t2	n1	10	8	20	10	2
+
+// Same task on two nodes
+Bid
+t3	n1	4	4	10	5	3
+t3	n2	4	4	10	5	3
+
+// Huge bid (would overflow 32-bit if added)
+Bid
+t4	n1	4294967295	1	1	1	4

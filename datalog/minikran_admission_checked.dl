@@ -1,0 +1,55 @@
+// Minikran admission policy — checked version (the real gate)
+// Fixes:
+// 1. Processes bids per node by priority, subtracting from remaining capacity
+// 2. Each task admitted to at most one node
+// 3. Uses safe comparisons (no addition that can overflow)
+
+.decl Node(id: symbol, cpuCap: number, memCap: number, storeCap: number, powerCap: number)
+.input Node
+
+.decl Bid(taskId: symbol, nodeId: symbol, cpu: number, mem: number, store: number, power: number, priority: number)
+.input Bid
+
+// Remaining capacity after higher-priority admissions on the same node
+.decl Remaining(nodeId: symbol, priority: number, cpuRem: number, memRem: number, storeRem: number, powerRem: number)
+
+// Initial remaining = full capacity (highest priority first)
+Remaining(nodeId, 0, cpuCap, memCap, storeCap, powerCap) :-
+    Node(nodeId, cpuCap, memCap, storeCap, powerCap).
+
+// Propagate remaining after a bid is considered
+Remaining(nodeId, prio, cpuRem, memRem, storeRem, powerRem) :-
+    Bid(taskId, nodeId, cpu, mem, store, power, prio),
+    Remaining(nodeId, prevPrio, cpuPrev, memPrev, storePrev, powerPrev),
+    prevPrio < prio,
+    !Bid(_, nodeId, _, _, _, _, midPrio), midPrio > prevPrio, midPrio < prio,
+    // Safe comparison: only admit if request fits remaining
+    cpu <= cpuPrev, mem <= memPrev, store <= storePrev, power <= powerPrev,
+    cpuRem = cpuPrev - cpu,
+    memRem = memPrev - mem,
+    storeRem = storePrev - store,
+    powerRem = powerPrev - power.
+
+// Also propagate when bid does NOT fit (remaining unchanged)
+Remaining(nodeId, prio, cpuPrev, memPrev, storePrev, powerPrev) :-
+    Bid(taskId, nodeId, cpu, mem, store, power, prio),
+    Remaining(nodeId, prevPrio, cpuPrev, memPrev, storePrev, powerPrev),
+    prevPrio < prio,
+    !Bid(_, nodeId, _, _, _, _, midPrio), midPrio > prevPrio, midPrio < prio,
+    (cpu > cpuPrev; mem > memPrev; store > storePrev; power > powerPrev).
+
+// Admit only if it fits remaining AND this task not already admitted elsewhere
+.decl AlreadyAdmitted(taskId: symbol)
+.decl Admit(taskId: symbol, nodeId: symbol)
+
+Admit(taskId, nodeId) :-
+    Bid(taskId, nodeId, cpu, mem, store, power, prio),
+    Remaining(nodeId, prevPrio, cpuPrev, memPrev, storePrev, powerPrev),
+    prevPrio < prio,
+    !Bid(_, nodeId, _, _, _, _, midPrio), midPrio > prevPrio, midPrio < prio,
+    cpu <= cpuPrev, mem <= memPrev, store <= storePrev, power <= powerPrev,
+    !AlreadyAdmitted(taskId).
+
+AlreadyAdmitted(taskId) :- Admit(taskId, _).
+
+.output Admit
