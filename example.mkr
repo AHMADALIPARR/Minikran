@@ -1,0 +1,13 @@
+# Minikran Resource Spec (.mkr)
+# Custom syntax for Minikran leases and verification state
+
+lease production {
+  cpu: 16
+  mem: 32
+  store: 100
+  power: 50
+  verified: true
+}
+
+assert production.within_ceiling
+assert production.verified

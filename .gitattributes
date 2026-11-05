@@ -1,0 +1,3 @@
+*.lean linguist-language=Lean
+*.mkr linguist-language=Minikran
+*.mkr linguist-detectable=true
