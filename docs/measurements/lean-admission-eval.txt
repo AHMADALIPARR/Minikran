@@ -1,0 +1,9 @@
+date: 2026-11-12T09:46:18-08:00
+PASS 1_cumulative_overcommit
+PASS 2_one_task_two_nodes
+PASS 3_overflow_int64
+PASS 4_near_2p31_no_wrap_on_64bit
+PASS 5_priority_tie
+PASS 6_lowest_node_and_load
+PASS 7_load_exceeds_cap
+admission_eval_fail=0

@@ -1,0 +1,25 @@
+date: 2026-11-12T09:46:15-08:00
+lean Lean (version 4.36.0-rc2, x86_64-unknown-linux-gnu, commit b35cb10cf2ced51a2fd1880cfdbf75c71ab7a35a, Release)
+command: lake -f lakefile-eval.toml build Minikran Minikran.Timed MinikranProofs
+
+warning: mathlib: repository has local changes:
+  /workspace/Minikran-main/.lake/packages/mathlib
+⚠ [195/213] Replayed Minikran.Lease
+warning: Minikran/Lease.lean: imports `Mathlib.Tactic.Core` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
+⚠ [196/213] Ran Minikran.Lease:irArts
+warning: Minikran/Lease.lean: imports `Mathlib.Tactic.Core` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
+⚠ [197/213] Replayed Minikran.Timed.Lease
+warning: Minikran/Timed/Lease.lean: imports `Mathlib.Tactic.Core` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
+⚠ [198/213] Ran Minikran.Timed.Lease:irArts
+warning: Minikran/Timed/Lease.lean: imports `Mathlib.Tactic.Core` from package `mathlib`, which is designed for use with the module system; consider adding `module` to the start of this file
+✔ [202/213] Built MinikranProofs.Admission (342ms)
+✔ [204/213] Built Minikran.Timed (486ms)
+✔ [207/213] Built MinikranProofs.LeaseTTL (567ms)
+✔ [209/213] Built MinikranProofs.Bidding (610ms)
+✔ [211/213] Built MinikranProofs (396ms)
+Build completed successfully (213 jobs).
+
+LAKE_EVAL_EXIT=0
+
+See lean-axioms.txt for #print axioms of all 21 theorems.
+See lean-admission-eval.txt for AdmissionEval vs expected_checked fixtures.

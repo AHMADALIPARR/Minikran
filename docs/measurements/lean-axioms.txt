@@ -1,0 +1,29 @@
+date: 2026-11-12T09:46:15-08:00
+lean Lean (version 4.36.0-rc2, x86_64-unknown-linux-gnu, commit b35cb10cf2ced51a2fd1880cfdbf75c71ab7a35a, Release)
+
+warning: mathlib: repository has local changes:
+  /workspace/Minikran-main/.lake/packages/mathlib
+'Minikran.gate_expired_silence' depends on axioms: [propext]
+'Minikran.gate_unverified_silence' depends on axioms: [propext]
+'Minikran.gate_unsigned_silence' depends on axioms: [propext]
+'Minikran.gate_commit_sound' depends on axioms: [propext]
+'Minikran.gate_commit_ceiling' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Minikran.gate_replay_silence' depends on axioms: [propext, Quot.sound]
+'Minikran.run_gt' depends on axioms: [propext]
+'Minikran.run_strictly_monotone' depends on axioms: [propext]
+'Minikran.production_timed_commits' depends on axioms: [propext, Quot.sound]
+'Minikran.admit_commit_fits' does not depend on any axioms
+'Minikran.admit_overcommit_silence' depends on axioms: [propext, Quot.sound]
+'Minikran.better_irrefl' depends on axioms: [propext, Quot.sound]
+'Minikran.better_trans' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Minikran.better_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Minikran.schedule_none' depends on axioms: [propext, Quot.sound]
+'Minikran.schedule_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Minikran.schedule_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Minikran.admitAll_conserves' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Minikran.admitAll_le_initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Minikran.fullGate_commit_sound' depends on axioms: [propext]
+'Minikran.Admission.admitted_bad_input_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+======= sorry / user axiom scan (MinikranProofs sources) =======
+NO_SORRY_NO_USER_AXIOM

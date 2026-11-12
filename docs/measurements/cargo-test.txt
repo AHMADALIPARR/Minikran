@@ -1,0 +1,100 @@
+ Downloading crates ...
+  Downloaded generic-array v0.14.7
+  Downloaded hex v0.4.3
+  Downloaded cpufeatures v0.2.17
+  Downloaded version_check v0.9.5
+  Downloaded digest v0.10.7
+  Downloaded block-buffer v0.10.4
+  Downloaded subtle v2.6.1
+  Downloaded cfg-if v1.0.5
+  Downloaded crypto-common v0.1.7
+  Downloaded itoa v1.0.19
+  Downloaded zmij v1.0.23
+  Downloaded sha2 v0.10.9
+  Downloaded unicode-ident v1.0.27
+  Downloaded proc-macro2 v1.0.107
+  Downloaded quote v1.0.47
+  Downloaded hmac v0.12.1
+  Downloaded serde_core v1.0.229
+  Downloaded serde_derive v1.0.229
+  Downloaded serde v1.0.229
+  Downloaded memchr v2.8.3
+  Downloaded serde_json v1.0.154
+  Downloaded typenum v1.20.1
+  Downloaded syn v3.0.10
+  Downloaded libc v0.2.191
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling serde_core v1.0.229
+   Compiling subtle v2.6.1
+   Compiling zmij v1.0.23
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.154
+   Compiling generic-array v0.14.7
+   Compiling libc v0.2.191
+   Compiling cpufeatures v0.2.17
+   Compiling memchr v2.8.3
+   Compiling cfg-if v1.0.5
+   Compiling itoa v1.0.19
+   Compiling hex v0.4.3
+   Compiling syn v3.0.10
+   Compiling block-buffer v0.10.4
+   Compiling crypto-common v0.1.7
+   Compiling digest v0.10.7
+   Compiling sha2 v0.10.9
+   Compiling hmac v0.12.1
+   Compiling serde_derive v1.0.229
+   Compiling minikran-eval v0.1.0 (/workspace/Minikran-main/node)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.78s
+     Running unittests src/lib.rs (target/debug/deps/minikran_eval-8a99bbd5ca61be1d)
+
+running 13 tests
+test bidding::tests::accounting_conserves ... ok
+test bidding::tests::full_gate_node_binding ... ok
+test bidding::tests::overcommit_silence ... ok
+test bidding::tests::schedule_tiebreak ... ok
+test bidding::tests::sliding_ceiling ... ok
+test gate::tests::commits_in_window ... ok
+test gate::tests::expired_silence ... ok
+test gate::tests::over_ceiling_silence ... ok
+test gate::tests::overflow_ttl_not_expired ... ok
+test gate::tests::replay_silence ... ok
+test gate::tests::run_monotone ... ok
+test gate::tests::unsigned_silence ... ok
+test gate::tests::unverified_silence ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/minikran_eval-7c9d4fddc2c5b615)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/integration.rs (target/debug/deps/integration-9c17a012acd00a64)
+
+running 12 tests
+test admission_matches_fixtures ... ok
+test end_to_end_dispatch ... ok
+test ledger_detects_byte_flip ... ok
+test ledger_detects_deletion ... ok
+test ledger_detects_reorder ... ok
+test ledger_detects_tail_prune ... ok
+test ledger_verifies ... ok
+test parses_example_mkr ... ok
+test rejects_bad_mkr ... ok
+test signature_roundtrip_and_tamper ... ok
+test telemetry_endpoint_serves_json ... ok
+test workload_verification ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.30s
+
+   Doc-tests minikran_eval
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
