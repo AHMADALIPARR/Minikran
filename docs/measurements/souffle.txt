@@ -1,0 +1,55 @@
+souffle Version: 2.5 (2.5)
+date: 2026-11-12T09:44:17-08:00
+
+===== datalog/tests (gate.dl) =====
+PASS basic
+PASS replay
+gate_exit=0
+
+===== datalog/admission_tests =====
+PASS 1_cumulative_overcommit [his] admitted: 1 n1;2 n1;
+PASS 1_cumulative_overcommit [checked] admitted: 1 n1;
+PASS 2_one_task_two_nodes [his] admitted: 1 n1;1 n2;
+PASS 2_one_task_two_nodes [checked] admitted: 1 n1;
+PASS 3_overflow_int64 [his] admitted: 1 n1;
+PASS 3_overflow_int64 [checked] admitted: <none>
+PASS 4_near_2p31_no_wrap_on_64bit [his] admitted: <none>
+PASS 4_near_2p31_no_wrap_on_64bit [checked] admitted: <none>
+PASS 5_priority_tie [his] admitted: 1 n1;2 n1;3 n1;
+PASS 5_priority_tie [checked] admitted: 2 n1;3 n1;
+PASS 6_lowest_node_and_load [his] admitted: 7 b;7 c;8 a;
+PASS 6_lowest_node_and_load [checked] admitted: 7 b;8 a;
+PASS 7_load_exceeds_cap [his] admitted: 1 n1;
+PASS 7_load_exceeds_cap [checked] admitted: <none>
+admission_exit=0
+
+===== typecheck programs already on main =====
+---- datalog/minikran_gate.dl ----
+TYPECHECK_OK datalog/minikran_gate.dl
+---- datalog/minikran_admission.dl ----
+TYPECHECK_OK datalog/minikran_admission.dl
+---- datalog/minikran_admission_checked.dl ----
+TYPECHECK_FAIL datalog/minikran_admission_checked.dl
+Warning: Variable taskId only occurs once in file minikran_admission_checked.dl at line 22
+    Bid(taskId, nodeId, cpu, mem, store, power, prio),
+--------^----------------------------------------------
+Error: Ungrounded variable midPrio in file minikran_admission_checked.dl at line 25
+    !Bid(_, nodeId, _, _, _, _, midPrio), midPrio > prevPrio, midPrio < prio,
+--------------------------------^---------------------------------------------
+Warning: Variable taskId only occurs once in file minikran_admission_checked.dl at line 35
+    Bid(taskId, nodeId, cpu, mem, store, power, prio),
+--------^----------------------------------------------
+Error: Ungrounded variable midPrio in file minikran_admission_checked.dl at line 38
+    !Bid(_, nodeId, _, _, _, _, midPrio), midPrio > prevPrio, midPrio < prio,
+--------------------------------^---------------------------------------------
+Error: Ungrounded variable midPrio in file minikran_admission_checked.dl at line 49
+    !Bid(_, nodeId, _, _, _, _, midPrio), midPrio > prevPrio, midPrio < prio,
+--------------------------------^---------------------------------------------
+Error: Unable to stratify relation(s) {Admit,AlreadyAdmitted}
+Relation AlreadyAdmitted in file minikran_admission_checked.dl at line 42
+.decl AlreadyAdmitted(taskId: symbol)
+------^-------------------------------
+has cyclic negation in file minikran_admission_checked.dl at line 51
+    !AlreadyAdmitted(taskId).
+-----^------------------------
+4 errors generated, evaluation aborted

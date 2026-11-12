@@ -1,0 +1,30 @@
+===== typecheck programs already on main =====
+---- datalog/minikran_gate.dl ----
+TYPECHECK_OK datalog/minikran_gate.dl
+---- datalog/minikran_admission.dl ----
+TYPECHECK_OK datalog/minikran_admission.dl
+---- datalog/minikran_admission_checked.dl ----
+TYPECHECK_FAIL datalog/minikran_admission_checked.dl
+Warning: Variable taskId only occurs once in file minikran_admission_checked.dl at line 22
+    Bid(taskId, nodeId, cpu, mem, store, power, prio),
+--------^----------------------------------------------
+Error: Ungrounded variable midPrio in file minikran_admission_checked.dl at line 25
+    !Bid(_, nodeId, _, _, _, _, midPrio), midPrio > prevPrio, midPrio < prio,
+--------------------------------^---------------------------------------------
+Warning: Variable taskId only occurs once in file minikran_admission_checked.dl at line 35
+    Bid(taskId, nodeId, cpu, mem, store, power, prio),
+--------^----------------------------------------------
+Error: Ungrounded variable midPrio in file minikran_admission_checked.dl at line 38
+    !Bid(_, nodeId, _, _, _, _, midPrio), midPrio > prevPrio, midPrio < prio,
+--------------------------------^---------------------------------------------
+Error: Ungrounded variable midPrio in file minikran_admission_checked.dl at line 49
+    !Bid(_, nodeId, _, _, _, _, midPrio), midPrio > prevPrio, midPrio < prio,
+--------------------------------^---------------------------------------------
+Error: Unable to stratify relation(s) {Admit,AlreadyAdmitted}
+Relation AlreadyAdmitted in file minikran_admission_checked.dl at line 42
+.decl AlreadyAdmitted(taskId: symbol)
+------^-------------------------------
+has cyclic negation in file minikran_admission_checked.dl at line 51
+    !AlreadyAdmitted(taskId).
+-----^------------------------
+4 errors generated, evaluation aborted
