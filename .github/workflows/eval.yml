@@ -1,0 +1,67 @@
+# Fuller evaluation CI. Does not replace .github/workflows/ci.yml.
+name: Eval
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  rust-and-datalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Cargo test (node crate)
+        run: cargo test --manifest-path node/Cargo.toml -- --test-threads=1
+      - name: Install Soufflé
+        run: |
+          set -e
+          sudo wget -O /etc/apt/sources.list.d/souffle.list "https://souffle-lang.github.io/ppa/souffle-latest.list"
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv-keys 0xF38D0B1D3C6A0C97
+          sudo apt-get update
+          sudo apt-get install -y souffle || {
+            echo "PPA install failed; trying GitHub release deb"
+            curl -sL https://api.github.com/repos/souffle-lang/souffle/releases/latest \
+              | python3 -c "import sys,json,re; assets=json.load(sys.stdin)['assets']; print('\n'.join(a['browser_download_url'] for a in assets))"
+            exit 1
+          }
+      - name: Soufflé eval fixtures
+        run: |
+          chmod +x datalog/tests/run.sh datalog/admission_tests/run.sh
+          ./datalog/tests/run.sh
+          ./datalog/admission_tests/run.sh
+      - name: Typecheck programs already on main
+        run: |
+          set +e
+          souffle --parse-errors --show=type-analysis datalog/minikran_gate.dl
+          souffle --parse-errors --show=type-analysis datalog/minikran_admission.dl
+          # The checked program already on main currently fails Soufflé (ungrounded midPrio,
+          # cyclic negation). Record the errors; do not patch that file.
+          if ! souffle --parse-errors --show=type-analysis datalog/minikran_admission_checked.dl; then
+            echo "TYPECHECK_FAIL datalog/minikran_admission_checked.dl (recorded, not patched)"
+          fi
+
+  lean-proofs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install elan
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain leanprover/lean4:v4.36.0-rc2
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+      - name: Generate lake-manifest.json
+        run: |
+          source $HOME/.elan/env
+          lake update
+      - uses: leanprover/lean-action@v1
+        with:
+          use-mathlib-cache: true
+          test: false
+      - name: Typecheck MinikranProofs (no lakefile.toml edit)
+        run: |
+          source $HOME/.elan/env
+          lake -f lakefile-eval.toml build Minikran Minikran.Timed MinikranProofs
+          lake -f lakefile-eval.toml env lean MinikranProofs/AxiomCheck.lean

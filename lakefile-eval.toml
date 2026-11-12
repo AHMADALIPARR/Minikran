@@ -1,0 +1,30 @@
+# Evaluation lakefile. Used only by `make -f eval.mk lean`.
+# This is a standalone copy of lakefile.toml plus a MinikranProofs library entry.
+# The committed lakefile.toml is not modified; see docs/lakefile-MinikranProofs.md.
+name = "Minikran"
+version = "0.1.0"
+defaultTargets = ["Minikran", "MinikranProofs"]
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+relaxedAutoImplicit = false
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+rev = "v4.36.0-rc2"
+
+[[lean_lib]]
+name = "Minikran"
+
+[[lean_lib]]
+name = "Minikran.Timed"
+
+[[lean_lib]]
+name = "MinikranProofs"
+
+[[lean_exe]]
+name = "AdmissionEval"
+srcDir = "lean-eval"
+root = "AdmissionEval"
