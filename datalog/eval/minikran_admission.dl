@@ -1,0 +1,44 @@
+// Copyright (c) 2026 AHMAD ALI PARR / SnapKitty Research Lab.
+// Licensed under the Functional Source License, Version 1.1, ALv2 Future License (FSL-1.1-ALv2).
+// See LICENSE file for full terms. After 2 years from release, converts to Apache-2.0.
+
+// ============================================================================
+// Minikran Sovereign Multi-Node Bidding & Admission Policy
+// ============================================================================
+
+// 1. Declarations: Node physical capacities, current active loads, and incoming bids
+.decl node_capacity(node: symbol, cpu: number, mem: number, store: number, power: number)
+.decl current_load(node: symbol, cpu: number, mem: number, store: number, power: number)
+.decl task_bid(task_id: number, node: symbol, cpu: number, mem: number, store: number, power: number, priority: number)
+
+// 2. Output & Intermediate Relations
+.decl valid_bid(task_id: number, node: symbol)
+.decl admitted_dispatch(task_id: number, node: symbol)
+
+// Input bindings (can be loaded from CSV, JSON bridges, or runtime facts)
+.input node_capacity
+.input current_load
+.input task_bid
+
+// ============================================================================
+// Admission Rules
+// ============================================================================
+
+// Rule 1: A bid is structurally valid only if the requested resources 
+// (CPU, Memory, Store, Power) fit strictly within the node's remaining headroom.
+valid_bid(TaskId, NodeId) :-
+    task_bid(TaskId, NodeId, ReqCpu, ReqMem, ReqStore, ReqPower, _),
+    node_capacity(NodeId, CapCpu, CapMem, CapStore, CapPower),
+    current_load(NodeId, LoadCpu, LoadMem, LoadStore, LoadPower),
+    ReqCpu + LoadCpu <= CapCpu,
+    ReqMem + LoadMem <= CapMem,
+    ReqStore + LoadStore <= CapStore,
+    ReqPower + LoadPower <= CapPower.
+
+// Rule 2: Gating output. If the bid passes validation, the Datalog gate 
+// commits the dispatch. Otherwise, it emits nothing (SILENCE).
+admitted_dispatch(TaskId, NodeId) :-
+    valid_bid(TaskId, NodeId).
+
+// Persist outputs for downstream runtime consumption and WORM ledger logging
+.output admitted_dispatch

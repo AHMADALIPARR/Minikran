@@ -1,0 +1,35 @@
+// Copyright (c) 2026 AHMAD ALI PARR / SnapKitty Research Lab.
+// Licensed under the Functional Source License, Version 1.1, ALv2 Future License (FSL-1.1-ALv2).
+// See LICENSE file for full terms. After 2 years from release, converts to Apache-2.0.
+//
+// Minikran gate in Souffle Datalog. Same rules as MinikranProofs/LeaseTTL.lean:
+// COMMIT iff within ceiling, verified, signature valid, now <= issued+ttl, seq > last.
+
+// lease(id, cpu, mem, store, power, verified, issued, ttl, seq, sig_ok)  (bools as 0/1)
+.decl lease(id:symbol, cpu:unsigned, mem:unsigned, store:unsigned, power:unsigned, verified:unsigned, issued:unsigned, ttl:unsigned, seq:unsigned, sig_ok:unsigned)
+.input lease
+// request(id, now, last_accepted_seq)
+.decl request(id:symbol, now:unsigned, last:unsigned)
+.input request
+
+.decl expired(id:symbol, now:unsigned)
+expired(i, n) :- request(i, n, _), lease(i, _, _, _, _, _, is, ttl, _, _), n > is + ttl.
+.decl unsigned_lease(id:symbol)
+unsigned_lease(i) :- lease(i, _, _, _, _, v, _, _, _, s), (v = 0 ; s = 0).
+.decl replay(id:symbol, now:unsigned)
+replay(i, n) :- request(i, n, l), lease(i, _, _, _, _, _, _, _, s, _), s <= l.
+.decl over_ceiling(id:symbol)
+over_ceiling(i) :- lease(i, c, m, st, p, _, _, _, _, _), (c > 16 ; m > 32 ; st > 100 ; p > 50).
+
+.decl silence(id:symbol, now:unsigned)
+silence(i, n) :- expired(i, n).
+silence(i, n) :- request(i, n, _), unsigned_lease(i).
+silence(i, n) :- replay(i, n).
+silence(i, n) :- request(i, n, _), over_ceiling(i).
+silence(i, n) :- request(i, n, _), !lease(i, _, _, _, _, _, _, _, _, _).
+
+.decl commit(id:symbol, now:unsigned)
+commit(i, n) :- request(i, n, _), lease(i, _, _, _, _, _, _, _, _, _), !silence(i, n).
+
+.output commit
+.output silence

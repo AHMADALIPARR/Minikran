@@ -1,0 +1,70 @@
+// Copyright (c) 2026 AHMAD ALI PARR / SnapKitty Research Lab.
+// Licensed under the Functional Source License, Version 1.1, ALv2 Future License (FSL-1.1-ALv2).
+// See LICENSE file for full terms. After 2 years from release, converts to Apache-2.0.
+//
+// Checked multi-node admission (same input schema as minikran_admission.dl).
+// Rules, mirrored exactly by MinikranProofs/Admission.lean and node/src/admission.rs:
+//  * Input guard: every value must be in [0, MAXV] (MAXV = 2147483647) and each
+//    (task_id, node) pair may appear at most once; otherwise NOTHING is admitted.
+//  * Headroom per node = Cap - Load, only when Load <= Cap on every resource
+//    (overflow-safe: no Req + Load addition).
+//  * A bid fits if Req <= headroom on every resource.
+//  * Each task has one candidate node: the lexicographically lowest node id among
+//    nodes it fits on (so a task is admitted to at most one node).
+//  * Per node, candidates are ranked by priority desc, then task_id asc
+//    (a task's priority = max priority over its bids). A candidate is admitted iff the
+//    prefix sum of requests of all candidates ranked at or before it fits the headroom on
+//    every resource. Sums are monotone, so admitted = a prefix, and the total admitted
+//    is <= Cap - Load on every resource.
+
+#define MAXV 2147483647
+
+.decl node_capacity(node: symbol, cpu: number, mem: number, store: number, power: number)
+.decl current_load(node: symbol, cpu: number, mem: number, store: number, power: number)
+.decl task_bid(task_id: number, node: symbol, cpu: number, mem: number, store: number, power: number, priority: number)
+.input node_capacity
+.input current_load
+.input task_bid
+
+.decl bad_input()
+bad_input() :- node_capacity(_, a, b, c, d), (a < 0 ; b < 0 ; c < 0 ; d < 0 ; a > MAXV ; b > MAXV ; c > MAXV ; d > MAXV).
+bad_input() :- current_load(_, a, b, c, d), (a < 0 ; b < 0 ; c < 0 ; d < 0 ; a > MAXV ; b > MAXV ; c > MAXV ; d > MAXV).
+bad_input() :- task_bid(t, _, a, b, c, d, p), (t < 0 ; a < 0 ; b < 0 ; c < 0 ; d < 0 ; p < 0 ; t > MAXV ; a > MAXV ; b > MAXV ; c > MAXV ; d > MAXV ; p > MAXV).
+bad_input() :- task_bid(t, n, _, _, _, _, _), 1 < count : { task_bid(t, n, _, _, _, _, _) }.
+bad_input() :- node_capacity(n, _, _, _, _), 1 < count : { node_capacity(n, _, _, _, _) }.
+bad_input() :- current_load(n, _, _, _, _), 1 < count : { current_load(n, _, _, _, _) }.
+
+.decl headroom(node: symbol, cpu: number, mem: number, store: number, power: number)
+headroom(n, cc - lc, cm - lm, cs - ls, cp - lp) :-
+    node_capacity(n, cc, cm, cs, cp), current_load(n, lc, lm, ls, lp),
+    lc <= cc, lm <= cm, ls <= cs, lp <= cp.
+
+.decl fits(task_id: number, node: symbol)
+fits(t, n) :- task_bid(t, n, rc, rm, rs, rp, _), headroom(n, hc, hm, hs, hp),
+    rc <= hc, rm <= hm, rs <= hs, rp <= hp.
+
+.decl not_lowest(task_id: number, node: symbol)
+not_lowest(t, n) :- fits(t, n), fits(t, n2), n2 < n.
+.decl candidate(task_id: number, node: symbol)
+candidate(t, n) :- fits(t, n), !not_lowest(t, n).
+
+.decl prio(task_id: number, p: number)
+prio(t, p) :- task_bid(t, _, _, _, _, _, _), p = max q : { task_bid(t, _, _, _, _, _, q) }.
+
+.decl at_or_before(t2: number, t: number, node: symbol)
+at_or_before(t, t, n) :- candidate(t, n).
+at_or_before(t2, t, n) :- candidate(t, n), candidate(t2, n), prio(t, p), prio(t2, p2),
+    (p2 > p ; (p2 = p, t2 < t)).
+
+.decl prefix(task_id: number, node: symbol, cpu: number, mem: number, store: number, power: number)
+prefix(t, n, sc, sm, ss, sp) :- candidate(t, n),
+    sc = sum rc : { at_or_before(t2, t, n), task_bid(t2, n, rc, _, _, _, _) },
+    sm = sum rm : { at_or_before(t2, t, n), task_bid(t2, n, _, rm, _, _, _) },
+    ss = sum rs : { at_or_before(t2, t, n), task_bid(t2, n, _, _, rs, _, _) },
+    sp = sum rp : { at_or_before(t2, t, n), task_bid(t2, n, _, _, _, rp, _) }.
+
+.decl admitted_dispatch(task_id: number, node: symbol)
+admitted_dispatch(t, n) :- !bad_input(), prefix(t, n, sc, sm, ss, sp), headroom(n, hc, hm, hs, hp),
+    sc <= hc, sm <= hm, ss <= hs, sp <= hp.
+
+.output admitted_dispatch
