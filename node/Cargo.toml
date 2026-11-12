@@ -1,0 +1,24 @@
+# Copyright (c) 2026 AHMAD ALI PARR / SnapKitty Research Lab.
+# Licensed under the Functional Source License, Version 1.1, ALv2 Future License (FSL-1.1-ALv2).
+# See LICENSE file for full terms. After 2 years from release, converts to Apache-2.0.
+[package]
+name = "minikran-eval"
+version = "0.1.0"
+edition = "2021"
+license-file = "../LICENSE"
+description = "Full Minikran node: .mkr lease parsing, COMMIT/SILENCE gate, admission, WORM ledger, telemetry"
+
+[dependencies]
+sha2 = "0.10"
+hmac = "0.12"
+hex = "0.4"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+libc = "0.2"
+
+[[bin]]
+name = "minikran-eval"
+path = "src/main.rs"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(kani)'] }
