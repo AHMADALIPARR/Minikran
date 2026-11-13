@@ -32,9 +32,8 @@ lean-axioms: lean
 
 # Soufflé fixtures for the eval gate and the eval admission policies.
 datalog:
-	chmod +x $(ROOT)/datalog/tests/run.sh $(ROOT)/datalog/admission_tests/run.sh
-	$(ROOT)/datalog/tests/run.sh
-	$(ROOT)/datalog/admission_tests/run.sh
+	bash $(ROOT)/datalog/tests/run.sh
+	bash $(ROOT)/datalog/admission_tests/run.sh
 
 # Typecheck the Soufflé programs already on main. Gate and original admission
 # should succeed. The checked program on main currently fails Soufflé (ungrounded

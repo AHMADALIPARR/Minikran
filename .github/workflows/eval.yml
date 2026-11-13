@@ -17,22 +17,24 @@ jobs:
       - name: Cargo test (node crate)
         run: cargo test --manifest-path node/Cargo.toml -- --test-threads=1
       - name: Install Soufflé
+        # The published PPA list at souffle-lang.github.io/ppa/souffle-latest.list
+        # returns 404, so install the official 2.5 .deb from the GitHub release.
         run: |
-          set -e
-          sudo wget -O /etc/apt/sources.list.d/souffle.list "https://souffle-lang.github.io/ppa/souffle-latest.list"
-          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com --recv-keys 0xF38D0B1D3C6A0C97
+          set -euo pipefail
+          . /etc/os-release
+          case "${VERSION_ID}" in
+            22.04) deb=x86_64-ubuntu-2204-souffle-2.5-Linux.deb ;;
+            *)     deb=x86_64-ubuntu-2404-souffle-2.5-Linux.deb ;;
+          esac
+          curl -fsSL -o /tmp/souffle.deb "https://github.com/souffle-lang/souffle/releases/download/2.5/${deb}"
           sudo apt-get update
-          sudo apt-get install -y souffle || {
-            echo "PPA install failed; trying GitHub release deb"
-            curl -sL https://api.github.com/repos/souffle-lang/souffle/releases/latest \
-              | python3 -c "import sys,json,re; assets=json.load(sys.stdin)['assets']; print('\n'.join(a['browser_download_url'] for a in assets))"
-            exit 1
-          }
+          sudo apt-get install -y libncurses6
+          sudo dpkg -i /tmp/souffle.deb || sudo apt-get install -y -f
+          souffle --version
       - name: Soufflé eval fixtures
         run: |
-          chmod +x datalog/tests/run.sh datalog/admission_tests/run.sh
-          ./datalog/tests/run.sh
-          ./datalog/admission_tests/run.sh
+          bash datalog/tests/run.sh
+          bash datalog/admission_tests/run.sh
       - name: Typecheck programs already on main
         run: |
           set +e
