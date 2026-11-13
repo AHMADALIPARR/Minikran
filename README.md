@@ -10,8 +10,8 @@ Minikran is a formal-verification stack for resource-bounded workload admission:
 
 Authored by **Ahmad Ali Parr** and Team · [SnapKitty Research Lab](https://github.com/AHMADALIPARR)
 
-[![CI](https://github.com/AHMADALIPARR/Minikran/actions/workflows/ci.yml/badge.svg)](https://github.com/AHMADALIPARR/Minikran/actions/workflows/ci.yml)
-[![Eval](https://github.com/AHMADALIPARR/Minikran/actions/workflows/eval.yml/badge.svg)](https://github.com/AHMADALIPARR/Minikran/actions/workflows/eval.yml)
+[![CI](https://github.com/AHMADALIPARR/Minikran/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/AHMADALIPARR/Minikran/actions/workflows/ci.yml)
+[![Eval](https://github.com/AHMADALIPARR/Minikran/actions/workflows/eval.yml/badge.svg?branch=main)](https://github.com/AHMADALIPARR/Minikran/actions/workflows/eval.yml)
 [![Lean 4](https://img.shields.io/badge/Lean_4-v4.36.0--rc2-purple)](lean-toolchain)
 [![License: FSL-1.1-ALv2](https://img.shields.io/badge/license-FSL--1.1--ALv2-blue)](LICENSE)
 
